@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User List</title>
+    <link rel="stylesheet" href="Second.css">
+  </head>
+  <body>
+    <h1>User List</h1>
+    <button onclick="logout()">Logout</button>
+    <ul id="user-list"></ul>
+    
+    <script>
+   
+      const token = localStorage.getItem("token");
+      if (!token) {
+        
+        window.location.href = "second.html";
+      }
+      
+    
+      fetch("https://reqres.in/api/users")
+        .then(response => response.json())
+        .then(data => {
+         
+          const userList = document.getElementById("user-list");
+          data.data.forEach(user => {
+            const listItem = document.createElement("li");
+            listItem.innerHTML = `
+              <a href="third.html?userId=${user.id}" onclick="showDetail(${user.id})">
+                ${user.first_name} ${user.last_name} (${user.email})
+              </a>
+            `;
+            userList.appendChild(listItem);
+          });
+        })
+        .catch(error => console.error(error));
+      
+      function logout() {
+        
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+      
+      function showDetail(userId) {
+        
+        localStorage.setItem("selectedUserId", userId);
+      }
+    </script>
+  </body>
+</html>

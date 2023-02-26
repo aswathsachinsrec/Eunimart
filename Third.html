@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Detail</title>
+    <link rel="stylesheet" href="Third.css">
+  </head>
+  <body>
+    <h1>User Detail</h1>
+    <button onclick="logout()">Logout</button>
+    <div id="user-detail"></div>
+    
+    <script>
+      
+      const token = localStorage.getItem("token");
+      if (!token) {
+        
+        window.location.href = "third.html";
+      }
+      
+      
+      const selectedUserId = localStorage.getItem("selectedUserId");
+      
+      
+      fetch(`https://reqres.in/api/users/${selectedUserId}`)
+        .then(response => response.json())
+        .then(data => {
+          
+          const userDetail = document.getElementById("user-detail");
+          const user = data.data;
+          userDetail.innerHTML = `
+            <p><strong>Name:</strong> ${user.first_name} ${user.last_name}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Avatar:</strong></p>
+            <img src="${user.avatar}" alt="${user.first_name} ${user.last_name}">
+          `;
+        })
+        .catch(error => console.error(error));
+      
+      function logout() {
+
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>
